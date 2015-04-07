@@ -1,6 +1,10 @@
 # zabbix-rest-bridge
 
-Creates a REST bridge for a [Zabbix server](https://www.zabix.com).  The [Zabbix protocol](https://www.zabbix.com/documentation/2.2/manual/appendix/items/activepassive) is _almost_ REST-like.  This application starts up a small REST server handling POST and GET methods and forwards to the given Zabbix server, returning the response.  Now CURL can be used to populate Zabbix.
+Creates a REST bridge for a [Zabbix server](https://www.zabix.com).
+The [Zabbix protocol](https://www.zabbix.com/documentation/2.2/manual/appendix/items/activepassive)
+is _almost_ REST-like.  This application starts up a small REST server
+handling POST and GET methods and forwards to the given Zabbix server,
+returning the response.  Now CURL can be used to populate Zabbix.
 
 ## Install
 
@@ -10,14 +14,19 @@ Creates a REST bridge for a [Zabbix server](https://www.zabix.com).  The [Zabbix
 
     zabbix-rest-bridge --server zabbix.example.com
 
+By default, `zabbix-rest-bridge` listens on port `8987` on all interfaces, forwarding requests to `zabbix.example.com` on port `10051`.
+
+## Getting Help
+
+    zabbix-rest-bridge -h
 
 ## Examples
 
-Post 'key=1234' from 'hostname':
+Values can be `POST`ed by specifying `POST` parameters.  `key` is the Zabbix key, `value` is the value to association, and `host` is the hostname where this value came from.  For instance to post 'foo=1234' from 'hostname'.
 
     curl -v -X POST -d host="hostname" -d key=foo -d value=1234 localhost:8987
 
-Post the contents of TestData.txt
+Well formed Zabbix JSON can be posted.  Post the contents of TestData.txt
 
     curl -v -X PUT -d @TestData.txt localhost:8987
 
