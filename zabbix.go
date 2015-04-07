@@ -53,8 +53,13 @@ func main() {
 			Value: "",
 			Usage: "Interface to listen on, default is all, 127.0.0.1 would be localhost only",
 		},
+		cli.BoolFlag{
+			Name:  "verbose",
+			Usage: "Verbose logging",
+		},
 	}
 	app.Action = func(context *cli.Context) {
+		verbose := context.Bool("verbose")
 		timeout := time.Duration(context.Int("timeout")) * time.Second
 		server := zbxutils.NewAgentHostPort(context.String("server"), context.Int("zabbix-port"))
 		r := mux.NewRouter()
@@ -72,13 +77,17 @@ func main() {
 				return
 			}
 
-			log.Printf("Sending %v to Zabbix\n", buffer.String())
+			if verbose {
+				log.Printf("Sending %v to Zabbix\n", buffer.String())
+			}
 			response, err := server.GetWithTimeout(buffer.String(), timeout)
 			if err != nil {
 				http.Error(w, fmt.Sprintf("Error from Zabbix server: %v", err), 200)
 				return
 			}
-			log.Printf("Got %v from Zabbix\n", string(response.Data))
+			if verbose {
+				log.Printf("Got %v from Zabbix\n", string(response.Data))
+			}
 			w.Write(response.Data)
 			return
 		}).Methods("POST")
@@ -88,13 +97,17 @@ func main() {
 				http.Error(w, fmt.Sprintf("%v", err), 200)
 				return
 			}
-			log.Printf("Sending %v to Zabbix\n", string(buffer))
+			if verbose {
+				log.Printf("Sending %v to Zabbix\n", string(buffer))
+			}
 			response, err := server.GetWithTimeout(string(buffer), timeout)
 			if err != nil {
 				http.Error(w, fmt.Sprintf("Error from Zabbix server: %v", err), 200)
 				return
 			}
-			log.Printf("Got %v from Zabbix\n", string(response.Data))
+			if verbose {
+				log.Printf("Got %v from Zabbix\n", string(response.Data))
+			}
 			w.Write(response.Data)
 			return
 		}).Methods("PUT")
