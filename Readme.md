@@ -3,7 +3,7 @@
 Creates a REST bridge for a [Zabbix server](https://www.zabix.com).
 The [Zabbix protocol](https://www.zabbix.com/documentation/2.2/manual/appendix/items/activepassive)
 is _almost_ REST-like.  This application starts up a small REST server
-handling POST and GET methods and forwards to the given Zabbix server,
+handling POST and PUT methods and forwards to the given Zabbix server,
 returning the response.  Now CURL can be used to populate Zabbix.
 
 ## Install
